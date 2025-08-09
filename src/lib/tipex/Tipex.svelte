@@ -105,6 +105,7 @@
 		utilities,
 		foot,
 		ctxId = `_tipex`,
+    removeDefaults = false,
 		...restProps
 	}: TipexProps = $props();
 
@@ -123,14 +124,14 @@
 		if (floating && !extensions.find(ext => ext.name === 'floatingMenu') && floatingRef) {
 			extensions.push(getDefaultFloatingMenu(floatingRef));
 		}
+    const extensionsToUse = removeDefaults ? extensions : [StarterKit.configure({
+					codeBlock: false
+				}), ...extensions];
+
+        
 		tipex = new Editor({
 			element: tipexEditorRef,
-			extensions: [
-				StarterKit.configure({
-					codeBlock: false
-				}),
-				...extensions
-			],
+			extensions: extensionsToUse,
 			content: body as string,
 			onTransaction({ editor }) {
 				// force re-render so `tipex.isActive` works as expected
